@@ -1,0 +1,55 @@
+name: Laravel + Vite CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  laravel-vite-ci:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: rootpass
+          MYSQL_DATABASE: laravel
+          MYSQL_USER: username
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+    - name: 🔄 Kódbázis klónozása
+      uses: actions/checkout@v4
+
+    - name: ⚙️ PHP + Composer telepítése
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 8.2
+        extensions: mbstring, pdo, pdo_mysql
+        coverage: none
+
+    - name: 📦 Laravel backend telepítése
+      run: |
+        composer install --prefer-dist --no-progress
+        cp .env.example .env
+        php artisan key:generate
+        php artisan migrate --force || true
+      working-directory: ./chess
+    - name: 🟩 Node.js és npm telepítése
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: 📦 Frontend build (Vite)
+      run: |
+        npm ci
+        npm run build
+      working-directory: ./chess
