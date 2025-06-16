@@ -18,15 +18,16 @@ Ez a projekt egy Laravel backend és Vue frontend alkalmazás Docker konténerek
    ```bash
    git clone https://github.com/urambatyam/sakk.git
    ```
-2. lépjebe a projekt mappába:
+2. Hozz létre egy .env nevü fáljt a chess/ mapában majd másold bele a .env.example tartalmát
+3. lépjebe a projekt mappába:
     ```bash
     cd ./chess
     ```
-3. hozlétre a docker fejlesztői környzetet:
+4. hozlétre a docker fejlesztői környzetet:
    ```bash
    docker-compose up -d --build
    ```
-4. Az oldal elérhető a [Localhost](http://localhost:8000) címen.
+5. Az oldal elérhető a [Localhost](http://localhost:8000) címen.
 
 ---
 ## Elinditás-leálitás
